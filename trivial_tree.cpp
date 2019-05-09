@@ -12,7 +12,7 @@ struct node{
 };
 
 void insert_son(node* node_father, int information);
-void inser_brother(node* node_brother, int information);
+void inser_brother(node* node_son, int information);
 void print_tree(node* tree);
 
 int main(){
@@ -25,23 +25,22 @@ int main(){
 };
 
 void insert_son(node* node_father, int information){
-    if (node_father->brother == NULL){
+    if (node_father->son == NULL){
         node* node_son = new node;
-        node_son ->information = information;
+        node_son->information = information;
         node_son->father = node_father;
         node_son->brother = NULL;
         node_father->son = node_son;
     } else{
-        inser_brother(node_father->brother, information);
+        inser_brother(node_father->son, information);
     }
 };
 
-void inser_brother(node* node_brother, int information){
-    node* node_brother_new = new node;
-    node_brother_new->information = information;
-    node_brother_new->brother = NULL;
-    node_brother_new->father = node_brother->father;
-    node_brother->brother = node_brother_new;    
+void inser_brother(node* node_son, int information){
+    node* node_brother = new node;
+    node_brother->information = information;
+    node_brother->father = node_son->father;
+    node_son->brother = node_brother;    
 };
 
 void print_tree(node* tree){
