@@ -11,12 +11,13 @@ struct node{
     node* brother;
 };
 
+node* create_node();
 void insert_son(node* node_father, int information);
 void inser_brother(node* node_son, int information);
 void print_tree(node* tree);
 
 int main(){
-    node* tree = new node;
+    node* tree = create_node();
     tree->information = 1;
     insert_son(tree, 2);
     insert_son(tree, 3);
@@ -24,9 +25,18 @@ int main(){
     return 0;
 };
 
+node* create_node(){
+    node *nd = new node;
+    nd->information = 0;
+    nd->father = NULL;
+    nd->brother = NULL;
+    nd->son = NULL;
+    return nd;
+}
+
 void insert_son(node* node_father, int information){
     if (node_father->son == NULL){
-        node* node_son = new node;
+        node* node_son = create_node();
         node_son->information = information;
         node_son->father = node_father;
         node_son->brother = NULL;
@@ -37,7 +47,7 @@ void insert_son(node* node_father, int information){
 };
 
 void inser_brother(node* node_son, int information){
-    node* node_brother = new node;
+    node* node_brother = create_node();
     node_brother->information = information;
     node_brother->father = node_son->father;
     node_son->brother = node_brother;    
@@ -45,7 +55,7 @@ void inser_brother(node* node_son, int information){
 
 void print_tree(node* tree){
     if (tree != NULL){
-        cout<<tree->information;
+        printf("%d\n",  tree->information);
         
         if (tree->brother != NULL){
             print_tree(tree->brother);
