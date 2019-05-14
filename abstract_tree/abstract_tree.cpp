@@ -1,5 +1,4 @@
-#include <stdlib.h>
-#include <stdio.h>
+#include <cstdio>
 #include <iostream>
 
 using namespace std;
@@ -12,6 +11,7 @@ struct node{
 };
 
 node* create_node();
+void input_tree(node* tree);
 void insert_son(node* node_father, int information);
 void inser_brother(node* node_son, int information);
 void print_tree(node* tree);
@@ -24,6 +24,15 @@ int main(){
     print_tree(tree);
     return 0;
 };
+
+void input_tree(node* tree){
+    int father, information;
+    cout<<"Enter the [parent, value] from no to insert into the tree:";
+    cin>>father>>information;
+    if ((father != 0) && (information != 0){
+        input_tree(tree)
+    }
+}
 
 node* create_node(){
     node *nd = new node;
