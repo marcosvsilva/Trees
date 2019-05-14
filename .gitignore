@@ -1,6 +1,9 @@
 # Mac Files
 *.DS_Store
 
+# Plataform files
+*.vscode
+
 # Prerequisites
 *.d
 
