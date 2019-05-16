@@ -11,6 +11,7 @@ struct node{
 };
 
 node* create_node(int value);
+void imput_tree(node* tree);
 void insert_tree(node* tree, int value);
 void insert_node(node* tree, node* no);
 void insert_left(node* tree, node* no);
@@ -19,28 +20,9 @@ void print_tree(node* tree);
 void remove_node(int value);
 
 int main(){
-    node* tree = create_node(28);
-
-    insert_tree(tree, 04);
-    insert_tree(tree, 30);
-    insert_tree(tree, 27);
-    insert_tree(tree, 29);
-    insert_tree(tree, 50);
-    insert_tree(tree, 02);
-    insert_tree(tree, 15);
-    insert_tree(tree, 13);
-    insert_tree(tree, 92);
-    insert_tree(tree, 14);
-    insert_tree(tree, 22);
-    insert_tree(tree, 17);
-    insert_tree(tree, 16);
-    insert_tree(tree, 54);
-    insert_tree(tree, 07);
-    insert_tree(tree, 01);
-    insert_tree(tree, 11);
-    
+    node* tree = NULL;
+    imput_tree(tree);
     print_tree(tree);
-
     return 0;
 };
 
@@ -53,40 +35,59 @@ node* create_node(int value){
     return no;
 };
 
+void imput_tree(node* tree){
+    int value;
+
+    cout<<"Enter integer positive values in the tree (enter -1 to break the inserts): ";
+    value = rand() % 100 -1;
+    // cin>>value;
+
+    if (value > 0){
+        value = value;
+        insert_tree(tree, value);
+        imput_tree(tree);
+    }
+}
+
 void insert_tree(node* tree, int value){
     node* no = create_node(value);
-    insert_node(tree, no);
+
+    if (tree == NULL) {
+        tree = no;
+    } else {
+        insert_node(tree, no);
+    } 
 };
 
 void insert_node(node* tree, node* no){
-    if (tree != NULL) {
+    if ((tree != NULL) && (tree->value != no->value)) {
         no->father = tree;
         no->value < tree->value ? insert_left(tree, no) : insert_right(tree, no);
     }
 };
 
 void insert_left(node* tree, node* no){
-    if (tree->left == NULL) {
+    if (tree->left == NULL)
         tree->left = no;
-    } else {
+    else
         insert_node(tree->left, no);
-    }
 }
 
 void insert_right(node* tree, node* no){
-    if (tree->right == NULL) {
+    if (tree->right == NULL)
         tree->right = no;
-    } else {
+    else
         insert_node(tree->right, no);
-    }
 }
 
 void print_tree(node* tree){
-    if (tree->left != NULL)
-        print_tree(tree->left);
+    if (tree != NULL) {
+        if (tree->left != NULL)
+            print_tree(tree->left);
 
-    cout<<tree->value<<" ";
+        cout<<tree->value<<" ";
 
-    if (tree->right != NULL)
-        print_tree(tree->right);
+        if (tree->right != NULL)
+            print_tree(tree->right);
+    }
 }
