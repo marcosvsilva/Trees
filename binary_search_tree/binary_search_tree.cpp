@@ -20,7 +20,7 @@ void print_tree(node* tree);
 void remove_node(int value);
 
 int main(){
-    node* tree = NULL;
+    node* tree = create_node(-1);
     imput_tree(tree);
     print_tree(tree);
     return 0;
@@ -39,8 +39,8 @@ void imput_tree(node* tree){
     int value;
 
     cout<<"Enter integer positive values in the tree (enter -1 to break the inserts): ";
-    value = rand() % 100 -1;
-    // cin>>value;
+    // value = rand() % 100 -1;
+    cin>>value;
 
     if (value > 0){
         value = value;
@@ -50,11 +50,10 @@ void imput_tree(node* tree){
 }
 
 void insert_tree(node* tree, int value){
-    node* no = create_node(value);
-
-    if (tree == NULL) {
-        tree = no;
+    if (tree->value < 0) {
+        tree->value = value;
     } else {
+        node* no = create_node(value);
         insert_node(tree, no);
     } 
 };
