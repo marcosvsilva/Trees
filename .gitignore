@@ -4,6 +4,9 @@
 # Plataform files
 *.vscode
 
+# Files compiled
+*.
+
 # Prerequisites
 *.d
 
