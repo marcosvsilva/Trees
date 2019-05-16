@@ -71,9 +71,9 @@ void input_tree(node* tree){
     int father, information;
     cout<<"Enter the [parent, value] from no to insert into the /tree:";
     cin>>father>>information;
-    if ((father != 0) && (information != 0)){
+    
+    if ((father != 0) && (information != 0))
         input_tree(tree);
-    }
 };
 
 node* create_node(){
@@ -86,14 +86,13 @@ node* create_node(){
 };
 
 void insert_son(node* node_father, int information){
-    if (node_father->son == NULL){
+    if (node_father->son == NULL) {
         node* node_son = create_node();
         node_son->information = information;
         node_son->father = node_father;
         node_father->son = node_son;
-    } else{
+    } else
         inser_brother(node_father->son, information);
-    }
 };
 
 void inser_brother(node* node_son, int information){
@@ -104,21 +103,19 @@ void inser_brother(node* node_son, int information){
 };
 
 void print_tree(node* tree){
-    if (tree != NULL){
-        cout<<tree->information<<" ";
+    if (tree != NULL) {
+        cout<<tree->information<<" "; 
         print_tree(tree->son);
         print_tree(tree->brother);
-    } else {
+    } else
         cout<<". ";
-    }
 };
 
 int calcule_height_tree(node* root){ 
-    if (root != NULL){
+    if (root != NULL) {
         int height_son = calcule_height_tree(root->son);
         int height_brother = calcule_height_tree(root->brother) - 1;
         return 1 + max(height_son, height_brother);
-    } else{
+    } else
         return -1;
-    }
 };
