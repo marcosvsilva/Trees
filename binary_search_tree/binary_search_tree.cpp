@@ -11,18 +11,18 @@ struct node{
 };
 
 node* create_node(int value);
-void imput_tree(node* tree);
+void input_tree(node* tree);
 void insert_tree(node* tree, int value);
 void insert_node(node* tree, node* no);
 void insert_left(node* tree, node* no);
 void insert_right(node* tree, node* no);
-void print_tree(node* tree);
+int input_node_remove();
 void remove_node(int value);
+void print_tree(node* tree);
 
 int main(){
     node* tree = create_node(-1);
-    imput_tree(tree);
-    print_tree(tree);
+    input_tree(tree);
     return 0;
 };
 
@@ -35,17 +35,29 @@ node* create_node(int value){
     return no;
 };
 
-void imput_tree(node* tree){
+void input_tree(node* tree){
     int value;
 
-    cout<<"Enter integer positive values in the tree (enter -1 to break the inserts): ";
-    // value = rand() % 100 -1;
+    cout<<"|----------------------------------------------------------------------|"<<endl;
+    cout<<"| Menu                                                                 |"<<endl;
+    cout<<"| Enter integer positive values in the tree                            |"<<endl;
+    cout<<"| Enter 0 to remove value tree                                         |"<<endl;
+    cout<<"| Enter -1 to print tree                                               |"<<endl;
+    cout<<"| Enter number < -1 to exit program                                    |"<<endl;
+    cout<<"|----------------------------------------------------------------------|"<<endl;
+    cout<<"Enter option: ";
     cin>>value;
 
-    if (value > 0){
-        value = value;
-        insert_tree(tree, value);
-        imput_tree(tree);
+    if (value > -1) {
+        if (value > 0) {
+            insert_tree(tree, value);
+        } else if (value = 0) {
+            remove_node(input_node_remove());
+        } else {
+            print_tree(tree);
+        }
+
+        input_tree(tree);
     }
 }
 
@@ -77,6 +89,18 @@ void insert_right(node* tree, node* no){
         tree->right = no;
     else
         insert_node(tree->right, no);
+}
+
+int imput_node_remove(){
+    int value_remove;
+    system("clear");
+    cout<<"Insert value for remove tree: ";
+    cin>>value_remove;
+    return value_remove;
+}
+
+void remove_node(int value){
+
 }
 
 void print_tree(node* tree){
