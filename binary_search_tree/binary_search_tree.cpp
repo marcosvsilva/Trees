@@ -17,7 +17,7 @@ void insert_node(node* tree, node* no);
 void insert_left(node* tree, node* no);
 void insert_right(node* tree, node* no);
 int input_node_remove();
-void remove_node(int value);
+void remove_node(node* tree, int value);
 void print_tree(node* tree);
 
 int main(){
@@ -38,6 +38,7 @@ node* create_node(int value){
 void input_tree(node* tree){
     int value;
 
+    system("clear");
     cout<<"|----------------------------------------------------------------------|"<<endl;
     cout<<"| Menu                                                                 |"<<endl;
     cout<<"| Enter integer positive values in the tree                            |"<<endl;
@@ -48,11 +49,11 @@ void input_tree(node* tree){
     cout<<"Enter option: ";
     cin>>value;
 
-    if (value > -1) {
+    if (value > -2) {
         if (value > 0) {
             insert_tree(tree, value);
-        } else if (value = 0) {
-            remove_node(input_node_remove());
+        } else if (value == 0) {
+            remove_node(tree, input_node_remove());
         } else {
             print_tree(tree);
         }
@@ -91,7 +92,7 @@ void insert_right(node* tree, node* no){
         insert_node(tree->right, no);
 }
 
-int imput_node_remove(){
+int input_node_remove(){
     int value_remove;
     system("clear");
     cout<<"Insert value for remove tree: ";
@@ -99,8 +100,25 @@ int imput_node_remove(){
     return value_remove;
 }
 
-void remove_node(int value){
-
+void remove_node(node* tree, int value){
+    node* node_aux;
+    if (tree->value == value) {
+        if (tree->right != NULL) {
+            node_aux = tree->right;
+        } else if (tree->left != NULL){
+            node_aux = tree->left;
+        } else {
+            node_aux = NULL;
+        }
+        tree = node_aux;
+    }
+    else {
+        if (tree->left != NULL)
+            remove_node(tree->left, value);
+        
+        if (tree->right != NULL)
+            remove_node(tree->right, value);
+    }
 }
 
 void print_tree(node* tree){
