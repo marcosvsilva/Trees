@@ -3,31 +3,29 @@
 
 using namespace std;
 
-struct node{
+struct Node{
     int value;
-    node* left;
-    node* right;
-    node* father;
+    Node *left;
+    Node *right;
+    Node *father;
 };
 
-node* create_node(int value);
-void input_tree(node* tree);
-void insert_tree(node* tree, int value);
-void insert_node(node* tree, node* no);
-void insert_left(node* tree, node* no);
-void insert_right(node* tree, node* no);
-int input_node_remove();
-void remove_node(node* tree, int value);
-void print_tree(node* tree);
+Node* create_node(int value);
+Node* insert_node(Node* tree, Node* no);
+Node* remove_node(Node* tree, int value);
+
+void input_tree(Node* tree);
+int input_remove();
+void print_inorder(Node* tree);
 
 int main(){
-    node* tree = create_node(-1);
+    Node *tree = NULL;
     input_tree(tree);
     return 0;
 };
 
-node* create_node(int value){
-    node* no = new node;
+Node* create_node(int value){
+    Node *no = new Node;
     no->value = value;
     no->left = NULL;
     no->right = NULL;
@@ -35,7 +33,47 @@ node* create_node(int value){
     return no;
 };
 
-void input_tree(node* tree){
+Node* insert_node(Node* tree, int value){
+    if ((tree != NULL) && (tree->value != value)){
+        if (value > tree->value)
+            tree->right = insert_node(tree->right, value);
+        else
+            tree->left = insert_node(tree->left, value);
+    } else
+        tree = create_node(value);
+    
+    return tree;
+};
+
+Node* remove_node(Node* tree, int value){
+    if (tree != NULL) {
+        if (tree->value == value) {
+            Node *node_aux = NULL;
+
+            if (tree->left != NULL)
+                node_aux = tree->left;
+            
+            else if (tree->right != NULL)
+                node_aux = tree->right;
+            
+            if (node_aux != NULL)
+                node_aux -> father = tree->father;
+
+            free(tree);
+            tree = node_aux;
+        }
+        
+        else if (tree->value > value)
+            tree->left  = remove_node(tree->left, value);
+
+        else
+            tree->right = remove_node(tree->right, value);
+    }
+
+    return tree;
+}
+
+void input_tree(Node* tree){
     int value;
 
     system("clear");
@@ -50,49 +88,20 @@ void input_tree(node* tree){
     cin>>value;
 
     if (value > -2) {
-        if (value > 0) {
-            insert_tree(tree, value);
-        } else if (value == 0) {
-            remove_node(tree, input_node_remove());
-        } else {
-            print_tree(tree);
-        }
+        if (value > 0)
+            tree = insert_node(tree, value);
+        
+        else if (value == 0)
+            tree = remove_node(tree, input_remove());
+        
+        else
+            print_inorder(tree);
 
         input_tree(tree);
     }
 }
 
-void insert_tree(node* tree, int value){
-    if (tree->value < 0) {
-        tree->value = value;
-    } else {
-        node* no = create_node(value);
-        insert_node(tree, no);
-    } 
-};
-
-void insert_node(node* tree, node* no){
-    if ((tree != NULL) && (tree->value != no->value)) {
-        no->father = tree;
-        no->value < tree->value ? insert_left(tree, no) : insert_right(tree, no);
-    }
-};
-
-void insert_left(node* tree, node* no){
-    if (tree->left == NULL)
-        tree->left = no;
-    else
-        insert_node(tree->left, no);
-}
-
-void insert_right(node* tree, node* no){
-    if (tree->right == NULL)
-        tree->right = no;
-    else
-        insert_node(tree->right, no);
-}
-
-int input_node_remove(){
+int input_remove(){
     int value_remove;
     system("clear");
     cout<<"Insert value for remove tree: ";
@@ -100,35 +109,14 @@ int input_node_remove(){
     return value_remove;
 }
 
-void remove_node(node* tree, int value){
-    node* node_aux;
-    if (tree->value == value) {
-        if (tree->right != NULL) {
-            node_aux = tree->right;
-        } else if (tree->left != NULL){
-            node_aux = tree->left;
-        } else {
-            node_aux = NULL;
-        }
-        tree = node_aux;
-    }
-    else {
-        if (tree->left != NULL)
-            remove_node(tree->left, value);
-        
-        if (tree->right != NULL)
-            remove_node(tree->right, value);
-    }
-}
-
-void print_tree(node* tree){
+void print_inorder(Node* tree){
     if (tree != NULL) {
         if (tree->left != NULL)
-            print_tree(tree->left);
+            print_inorder(tree->left);
 
         cout<<tree->value<<" ";
 
         if (tree->right != NULL)
-            print_tree(tree->right);
+            print_inorder(tree->right);
     }
 }
