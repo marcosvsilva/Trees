@@ -5,101 +5,120 @@ using namespace std;
 
 struct node{
     int information;
-    node* father;
-    node* son;
-    node* brother;
+    node *father;
+    node *son;
+    node *brother;
 };
 
-node* create_node();
-void input_tree(node* tree);
-void insert_son(node* node_father, int information);
-void inser_brother(node* node_son, int information);
+node* create_node(int value);
+node* input_tree(node* tree);
+node* insert_node(node* tree, int father, int value);
+node* insert_brother(node* tree, int value);
 void print_tree(node* tree);
 int calcule_height_tree(node* root);
 
 int main(){
-    //height 0
-    node* tree = create_node();
-    
-    //height 1
-    tree->information = 1; //root
-    insert_son(tree, 2);   //son of root
-    insert_son(tree, 3);   //son of root
-    
-    //height 2
-    node* son1 = tree->son;   //root = 2
-    insert_son(son1, 4);      //son of 2
-    insert_son(son1, 5);      //son of 2
-    
-    node* brother1 = son1->brother; //root = 3
-    insert_son(brother1, 6);        //son of 3
-    insert_son(brother1, 7);        //son of 3
+    node* tree = NULL;
+    int op;
 
-    //height 3
-    node* son2 = son1->son; //root = 4
-    insert_son(son2, 8);    //son of 4
-    insert_son(son2, 9);    //son of 4
-    
-    node* brother2 = son2->brother; //root = 5
-    insert_son(brother2, 10);       //son of 5
-    insert_son(brother2, 11);       //son of 5
+    do {
+        system("clear");
+        cout<<"|-------------------------------------------------------|"<<endl;
+        cout<<"| ----------------------- MENU -----------------------  |"<<endl;
+        cout<<"| 1- Insert value for enter new value in abstract tree  |"<<endl;
+        cout<<"| 2- Print tree                                         |"<<endl;
+        cout<<"| 3- Calcule height tree                                |"<<endl;
+        cout<<"|-------------------------------------------------------|"<<endl;
+        cout<<"Insert operation: ";
+        cin>>op;
+        // op=1;
 
-    node* son3 = brother1->son; //root = 6
-    insert_son(son3, 12);       //son of 6
-    insert_son(son3, 13);       //son of 6
+        switch (op)
+        {
+        case 1:
+            tree = input_tree(tree);
+            break;
+        
+        case 2:
+            char aux;
+            system("clear");
+            print_tree(tree);
+            cin>>aux;
+            break;
+        
+        case 3:
+            char aux2;
+            system("clear");
+            cout<<"Height of tree: "<<calcule_height_tree(tree)<<endl;
+            cin>>aux2;
+            system("pause");
+        }
+    } while((0 < op) && (op < 4));
 
-    node* brother3 = son3->brother; //root = 7
-    insert_son(brother3, 14);       //son of 7    
-    insert_son(brother3, 15);       //son of 7
-
-    //height 4
-    node* son4 = brother3->son; //root = 10
-    insert_son(son4, 16);       //son of 10
-
-    //height 5
-    node* son5 = son4->son; //root = 16
-    insert_son(son5, 17);   //son of 16
-
-    cout<<"PRINT TREE:"<<endl;
-    print_tree(tree);
-
-    cout<<endl<<"HEIGHT OF TREE: "<<calcule_height_tree(tree)<<endl;
     return 0;
 };
 
-void input_tree(node* tree){
-    int father, information;
-    cout<<"Enter the [parent, value] from no to insert into the /tree:";
-    cin>>father>>information;
-    
-    if ((father != 0) && (information != 0))
-        input_tree(tree);
-};
-
-node* create_node(){
+node* create_node(int value){
     node *nd = new node;
-    nd->information = 0;
+    nd->information = value;
     nd->father = NULL;
     nd->brother = NULL;
     nd->son = NULL;
     return nd;
 };
 
-void insert_son(node* node_father, int information){
-    if (node_father->son == NULL) {
-        node* node_son = create_node();
-        node_son->information = information;
-        node_son->father = node_father;
-        node_father->son = node_son;
-    } else
-        inser_brother(node_father->son, information);
+node* input_tree(node* tree){
+    int father, value;
+    node *no = NULL;
+    
+    system("clear");
+    if (tree == NULL) {
+        cout<<"Enter value from insert into tree: ";
+        cin>>value;
+        // value = 0;
+        no = create_node(value);
+    } else {
+        cout<<"Enter father to insert son into tree: ";
+        cin>>father;
+        // father = 0;
+        cout<<"Enter value from insert into tree: ";
+        cin>>value;
+        // value = 0;
+        no = insert_node(tree, father, value);
+    }
+    
+    return no;
 };
 
-void inser_brother(node* node_son, int information){
-    node* node_brother = create_node();
-    node_brother->information = information;
-    node_brother->father = node_son->father;
-    node_son->brother = node_brother;    
+node* insert_node(node* tree, int father, int value){
+    if (tree != NULL) {
+        if (tree->information == father) {
+            if (tree->son == NULL) {
+                tree->son = create_node(value);
+                tree->son->father = tree;
+            } else
+                tree->son = insert_brother(tree->son, value);
+        }
+        else {
+            if (tree->son != NULL)
+                tree->son = insert_node(tree->son, father, value);
+            
+            else if (tree->brother != NULL)
+                tree->brother = insert_node(tree->brother, father, value);
+        }
+    }
+    return tree;
+};
+
+node* insert_brother(node* tree, int value){
+    if (tree->brother == NULL) {
+        node *no = create_node(value);
+        no->father = tree->father;
+        tree->brother = no;
+    } else
+        tree->brother = insert_brother(tree->brother, value);
+    
+    return tree;
 };
 
 void print_tree(node* tree){
@@ -111,10 +130,10 @@ void print_tree(node* tree){
         cout<<". ";
 };
 
-int calcule_height_tree(node* root){ 
-    if (root != NULL) {
-        int height_son = calcule_height_tree(root->son);
-        int height_brother = calcule_height_tree(root->brother) - 1;
+int calcule_height_tree(node* tree){ 
+    if (tree != NULL) {
+        int height_son = calcule_height_tree(tree->son);
+        int height_brother = calcule_height_tree(tree->brother) - 1;
         return 1 + max(height_son, height_brother);
     } else
         return -1;
