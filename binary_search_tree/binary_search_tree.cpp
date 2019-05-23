@@ -50,8 +50,12 @@ Node* remove_node(Node* tree, int value){
         if (tree->value == value) {
             Node *node_aux = NULL;
 
-            if (tree->left != NULL)
+            if (tree->left != NULL) {
                 node_aux = tree->left;
+                
+                if (tree->right != NULL)
+                    node_aux->right = tree->right;
+            }
             
             else if (tree->right != NULL)
                 node_aux = tree->right;
