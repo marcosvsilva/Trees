@@ -4,7 +4,7 @@
 using namespace std;
 
 struct node{
-    int information;
+    int value;
     node *father;
     node *son;
     node *brother;
@@ -12,7 +12,8 @@ struct node{
 
 node* create_node(int value);
 node* input_tree(node* tree);
-node* insert_node(node* tree, int father, int value);
+node* search_node(node* tree, int value);
+node* insert_node(node* tree, int value);
 node* insert_brother(node* tree, int value);
 void print_tree(node* tree);
 int calcule_height_tree(node* root);
@@ -60,7 +61,7 @@ int main(){
 
 node* create_node(int value){
     node *nd = new node;
-    nd->information = value;
+    nd->value = value;
     nd->father = NULL;
     nd->brother = NULL;
     nd->son = NULL;
@@ -84,37 +85,41 @@ node* input_tree(node* tree){
         cout<<"Enter value from insert into tree: ";
         cin>>value;
         // value = 0;
-        no = insert_node(tree, father, value);
+        no = insert_node(search_node(tree, father), value);
     }
     
     return no;
 };
 
-node* insert_node(node* tree, int father, int value){
-    if (tree != NULL) {
-        if (tree->information == father) {
-            if (tree->son == NULL) {
-                tree->son = create_node(value);
-                tree->son->father = tree;
-            } else
-                tree->son = insert_brother(tree->son, value);
-        }
-        else {
-            if (tree->son != NULL)
-                tree->son = insert_node(tree->son, father, value);
+node* search_node(node* tree, int value){
+    node *no = NULL;
+    if (tree != NULL){
+        if (tree->value != value){
+            no = search_node(tree->son, value);
             
-            else if (tree->brother != NULL)
-                tree->brother = insert_node(tree->brother, father, value);
-        }
+            if (no == NULL)
+                no = search_node(tree->brother, value);
+        } else
+            no = tree;
+    }
+    return no;
+}
+
+node* insert_node(node* tree, int value){
+    if (tree != NULL) {
+        if (tree->son == NULL) {
+            tree->son = create_node(value);
+            tree->son->father = tree;
+        } else
+            tree->son = insert_brother(tree->son, value);
     }
     return tree;
 };
 
 node* insert_brother(node* tree, int value){
     if (tree->brother == NULL) {
-        node *no = create_node(value);
-        no->father = tree->father;
-        tree->brother = no;
+        tree->brother = create_node(value);
+        tree->brother->father = tree->father;
     } else
         tree->brother = insert_brother(tree->brother, value);
     
@@ -123,7 +128,7 @@ node* insert_brother(node* tree, int value){
 
 void print_tree(node* tree){
     if (tree != NULL) {
-        cout<<tree->information<<" "; 
+        cout<<tree->value<<" "; 
         print_tree(tree->son);
         print_tree(tree->brother);
     } else
